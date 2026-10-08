@@ -1,0 +1,102 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.container-fluid {
+    background: red;
+}
+
+.container-sizes > .red, .black, .blue {
+    width: 50px;
+    height: 50px;
+}
+
+.container-sizes {
+    display: flex;
+}
+
+.red {
+    background-color: red;
+    margin-right: 2rem;
+}
+
+.black {
+    background-color: black;
+    margin-left: 2rem;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.search-btn {
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .search-btn:hover {
+        transform: scale(1.08); /* Slightly enlarges the button */
+        background-color: #f8f9fa; /* Keeps it clean white */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a nice depth shadow */
+    }
+
+    .search-btn:active {
+        transform: scale(0.95); /* Slight shrink effect when clicked */
+    }
+
+.typing-container {
+    display: inline-block;
+}
+
+.typing-effect {
+    font-family: monospace; /* Monospace gives a clean typewriter feel */
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid #ffffff; /* Blinking cursor */
+    width: 22ch; /* Matches the exact character count of "Welcome to Telly Store" */
+    animation: typing 3s steps(22, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 22ch;
+    }
+}
+
+@keyframes blink-caret {
+    from, to {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: #ffffff;
+    }
+}
+
+/* Added hover style for the centered "Browse TV Screens" navbar link */
+.hover-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: background-color 0.2s ease-in-out;
+}

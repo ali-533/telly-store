@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container py-5 text-center">
+    <div class="card shadow-sm border-0 p-5 mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <h1 class="text-success fw-bold mb-3">🎉 Order Placed Successfully!</h1>
+            <p class="text-muted fs-5">@TempData["SuccessMessage"]</p>
+            <p class="text-secondary small mb-4">Your payment has been validated by the server and your items are being prepared for shipping.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-sm fw-bold px-4 py-2" onclick="localStorage.removeItem('tellyCart');">Continue Shopping</a>
+        </div>
+    </div>
+</div>

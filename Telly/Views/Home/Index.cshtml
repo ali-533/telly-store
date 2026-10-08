@@ -1,0 +1,188 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Telly - Home";
+    var brands = ViewBag.Brands as List<Telly.Models.Brand> ?? new();
+    var dimensions = ViewBag.Dimensions as List<Telly.Models.Dimension> ?? new();
+    var tvs = ViewBag.Tvs as List<Telly.Models.Tv> ?? new();
+}
+
+<div class="container py-4">
+   
+    <!-- Hero Banner -->
+    <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
+        <div class="container-fluid py-3 typing-container">
+            <h1 class="display-4 fw-bold text-white typing-effect">Welcome to Telly Store</h1>
+            <p class="col-md-8 fs-4 text-light">Explore premium 4K TVs, screen dimensions, trusted brands, and accessories.</p>
+            <a asp-action="Accessory" class="btn btn-outline-light btn-lg mt-2">Browse TV Accessories &rarr;</a>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT: SIDEBAR FILTERS + PRODUCT CATALOG -->
+    <div class="row">
+        
+        <!-- LEFT SIDEBAR: FILTERS -->
+        <div class="col-lg-3 mb-4">
+            <div class="card shadow-sm border-0 p-3 bg-light">
+                <h4 class="fw-bold mb-3 border-bottom pb-2">Filter Products</h4>
+                
+                <form asp-action="Index" method="get">
+                    <!-- Preserve search keyword if any -->
+                    <input type="hidden" name="searchString" value="@Context.Request.Query["searchString"]" />
+
+                    <!-- Brands Filter -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark">Brands</h6>
+                        @foreach (var brand in brands)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="selectedBrands" value="@brand.BrandId" id="brand-@brand.BrandId">
+                                <label class="form-check-label small" for="brand-@brand.BrandId">
+                                    @brand.BrandName
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <hr />
+
+                    <!-- Screen Sizes Filter -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark">Screen Size (inches)</h6>
+                        @foreach (var dim in dimensions)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="selectedSizes" value="@dim.DimensionId" id="size-@dim.DimensionId">
+                                <label class="form-check-label small" for="size-@dim.DimensionId">
+                                    @dim.Size"
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <hr />
+
+                    <!-- Price Range Slider -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark">Price Range</h6>
+                        <input type="range" class="form-range" min="0" max="5000" step="100" id="priceRange" name="maxPrice" value="5000" oninput="document.getElementById('priceVal').textContent = this.value">
+                        <div class="d-flex justify-content-between small text-muted">
+                            <span>$0</span>
+                            <span class="fw-bold text-danger">$<span id="priceVal">5000</span></span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-danger btn-sm fw-bold">Apply Filters</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Reset Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT CATALOG AREA -->
+        <div class="col-lg-9">
+            <div class="tab-content" id="tellyTabsContent">
+                <div class="tab-pane fade show active" id="tvs-content" role="tabpanel">
+                    <h3 class="mb-4 border-bottom pb-2">Available Televisions (@tvs.Count)</h3>
+                    
+                    @if (tvs.Count == 0)
+                    {
+                        <div class="alert alert-warning text-center py-4">
+                            <h5>No televisions match your filter criteria.</h5>
+                            <p class="small text-muted mb-0">Try unchecking some filters or resetting your search.</p>
+                        </div>
+                    }
+
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        @foreach (var tv in tvs)
+                        {
+                            <div class="col">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="bg-light text-center p-3 rounded-top">
+                                        <img src="~/images/tv-images/@(!string.IsNullOrEmpty(tv.TvUrl) ? tv.TvUrl : "samsung-qn90f.jpg")" 
+                                             class="img-fluid rounded object-fit-contain" style="height: 180px;" alt="@tv.Tvname" />
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold">@tv.Tvname</h5>
+                                        <p class="text-muted mb-2 small">Type: @tv.Tvtype | Quality: <strong>@tv.TvimageQuality</strong></p>
+                                        <div class="mb-3">
+                                            <span class="badge bg-primary">Brand: @tv.Brand?.BrandName</span>
+                                            <span class="badge bg-info text-dark">Size: @tv.Dimension?.Size"</span>
+                                        </div>
+                                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                                            <span class="text-danger fw-bold fs-5">@(tv.Price.HasValue ? $"${tv.Price}" : "Contact for Price")</span>
+                                            
+                                            <button type="button" class="btn btn-dark btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#tvModal"
+                                            data-name="@tv.Tvname"
+                                            data-type="@tv.Tvtype"
+                                            data-quality="@tv.TvimageQuality"
+                                            data-brand="@tv.Brand?.BrandName"
+                                            data-size="@tv.Dimension?.Size"
+                                            data-price="@(tv.Price.HasValue ? $"${tv.Price}" : "Contact for Price")"
+                                            data-image="@Url.Content($"~/images/tv-images/{(!string.IsNullOrEmpty(tv.TvUrl) ? tv.TvUrl : "samsung-qn90f.jpg")}")">
+                                            View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- REUSABLE POPUP MODAL -->
+<div class="modal fade" id="tvModal" tabindex="-1" aria-labelledby="tvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold" id="tvModalLabel">Television Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center bg-light p-3 rounded">
+                        <img id="modalTvImage" src="" class="img-fluid rounded object-fit-contain" style="max-height: 250px;" alt="TV Image" />
+                    </div>
+                    <div class="col-md-6">
+                        <h3 id="modalTvName" class="fw-bold text-primary mb-3"></h3>
+                        <p class="mb-2"><strong>Type:</strong> <span id="modalTvType"></span></p>
+                        <p class="mb-2"><strong>Image Quality:</strong> <span id="modalTvQuality"></span></p>
+                        <p class="mb-2"><strong>Brand:</strong> <span id="modalTvBrand"></span></p>
+                        <p class="mb-3"><strong>Screen Size:</strong> <span id="modalTvSize"></span>"</p>
+                        <h4 id="modalTvPrice" class="text-danger fw-bold"></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addToCartBtn">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // JavaScript to populate modal data dynamically when "View Details" is clicked
+        const tvModal = document.getElementById('tvModal');
+        tvModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            
+            document.getElementById('tvModalLabel').textContent = button.getAttribute('data-name');
+            document.getElementById('modalTvName').textContent = button.getAttribute('data-name');
+            document.getElementById('modalTvType').textContent = button.getAttribute('data-type');
+            document.getElementById('modalTvQuality').textContent = button.getAttribute('data-quality');
+            document.getElementById('modalTvBrand').textContent = button.getAttribute('data-brand');
+            document.getElementById('modalTvSize').textContent = button.getAttribute('data-size');
+            document.getElementById('modalTvPrice').textContent = button.getAttribute('data-price');
+            document.getElementById('modalTvImage').src = button.getAttribute('data-image');
+        });
+    </script>
+}

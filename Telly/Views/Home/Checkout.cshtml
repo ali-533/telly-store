@@ -1,0 +1,62 @@
+﻿@model Telly.Models.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Secure Checkout";
+}
+
+<div class="container py-4" style="max-width: 650px;">
+    <h2 class="mb-4 border-bottom pb-2 fw-bold text-danger">🔒 Secure Checkout</h2>
+
+    <form asp-action="Checkout" method="post" id="serverCheckoutForm" class="needs-validation">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+        <!-- Hidden input to transfer cart items from client localStorage to server -->
+        <input type="hidden" asp-for="CartJson" id="hiddenCartJson" />
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+            <input asp-for="FullName" class="form-control" placeholder="george george" />
+            <span asp-validation-for="FullName" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label fw-bold">Delivery Address (Lebanon)</label>
+            <input asp-for="Address" class="form-control" placeholder="City, Street, Building" />
+            <span asp-validation-for="Address" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CardNumber" class="form-label fw-bold">Card Number</label>
+            <input asp-for="CardNumber" class="form-control" placeholder="4111222233334444" maxlength="19" />
+            <span asp-validation-for="CardNumber" class="text-danger small"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="ExpiryDate" class="form-label fw-bold">Expiry Date</label>
+                <input asp-for="ExpiryDate" class="form-control" placeholder="MM/YY" maxlength="5" />
+                <span asp-validation-for="ExpiryDate" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Cvv" class="form-label fw-bold">CVV</label>
+                <input asp-for="Cvv" class="form-control" placeholder="123" maxlength="4" type="password" />
+                <span asp-validation-for="Cvv" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-danger btn-lg fw-bold mb-4">Confirm & Pay</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Automatically inject localStorage cart data into the hidden input before submitting
+        document.getElementById('serverCheckoutForm').addEventListener('submit', function () {
+            const cartData = localStorage.getItem('tellyCart') || '[]';
+            document.getElementById('hiddenCartJson').value = cartData;
+        });
+    </script>
+}

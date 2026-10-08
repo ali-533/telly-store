@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Telly</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Telly.styles.css" asp-append-version="true" />
+</head>
+<body class="m-5 mt-0">
+    <header class="p-3">
+        <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3 py-2" style="background-color: #dc3545;">
+            <div class="container-fluid">
+                <!-- Brand (Left) -->
+                <a class="navbar-brand text-white fw-bold ms-2" asp-controller="Home" asp-action="Index">Telly</a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
+                    
+                    <!-- Left side: Search Form -->
+                    <ul class="navbar-nav me-auto align-items-center ms-3">
+                        <li class="nav-item">
+                            <form asp-controller="Home" asp-action="Index" method="get" class="d-flex">
+                                <input type="text" name="searchString" class="form-control form-control-sm me-2" placeholder="Pick a TV" value="@Context.Request.Query["searchString"]" />
+                                <button type="submit" class="btn btn-light btn-sm fw-bold search-btn">Search</button>
+                            </form>
+                        </li>
+                    </ul>
+
+                    <!-- MIDDLE: Browse TV Screens Link -->
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="btn btn-suceess fw-bold px-3 py-1 rounded bg-white hover-link" asp-controller="Home" asp-action="Index">
+                                📺 Browse TV Screens
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Right side: Shopping Cart Icon -->
+                    <ul class="navbar-nav ms-auto align-items-center me-3">
+                        <li class="nav-item">
+                            <a href="#" class="text-white text-decoration-none position-relative" data-bs-toggle="modal" data-bs-target="#cartModal" title="View Cart">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" class="bi bi-cart5" viewBox="0 0 16 16">
+                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                                </svg>
+                                <!-- Cart Counter Badge -->
+                                <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white text-dark fw-bold" style="display:none;">0</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- CART MODAL -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="cartModalLabel">🛒 Your Telly Cart</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="cartModalBody">
+                    <!-- Dynamically populated cart items -->
+                </div>
+                <div class="modal-footer justify-content-between align-items-center">
+                    <h5 class="m-0">Total: <span id="cartTotal" class="text-danger fw-bold">$0.00</span></h5>
+                    <div>
+                        <!-- Checkout Button (Shown when cart has items) -->
+                        <a asp-controller="Home" asp-action="Checkout" class="btn btn-success fw-bold btn-sm" id="proceedCheckoutBtn" style="display:none;">
+                            💳 Proceed to Checkout
+                        </a>
+                        
+                        <!-- Close Button -->
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+
+                        <!-- Browse TVs Button (Shown when cart is empty) -->
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-danger btn-sm" id="emptyCartRedirectBtn" style="display:none;">Browse Televisions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="border-top footer text-white py-3 mt-5" style="background-color: #dc3545;">
+        <div class="container text-center fs-5">
+            &copy; 2026 - Telly - Made with ASP.NET M❤️C
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@model List<Telly.Models.Tvaccessory>
+
+@{
+    ViewData["Title"] = "TV Accessories";
+}
+<div class="container py-4">
+    <h2 class="mb-4 border-bottom pb-2">TV Accessories Catalog</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        @foreach (var acc in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    
+                    <!-- Container for accessory images -->
+                    <div class="bg-light text-center p-3 rounded-top">
+                        <div class="bg-light text-center p-0 rounded-top overflow-hidden">
+                            @foreach (var imgName in acc.ImageList)
+                            {
+                                <img src="/images/tv-accessories/@imgName" 
+                                     class="img-fluid w-100" 
+                                     style="height: 180px; object-fit: cover;" 
+                                     alt="@acc.AccessoryName" 
+                                     onerror="this.style.display='none'" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">@acc.AccessoryName</h5>
+                        <p class="text-muted small mb-3">Battery: @(string.IsNullOrEmpty(acc.BatteryType) ? "N/A" : acc.BatteryType)</p>
+
+                        <ul class="list-group list-group-flush mb-3 small">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Length:</span> <strong>@(acc.AccessoryLength.HasValue ? $"{acc.AccessoryLength} cm" : "Standard")</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Brand:</span> <strong>@(acc.Brand != null ? acc.Brand.BrandName : "Universal")</strong>
+                            </li>
+                        </ul>
+
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <!-- Displays your computed code-based price -->
+                            <span class="text-danger fw-bold fs-5">$@acc.Price.ToString("0.00")</span>
+
+                            <button type="button" class="btn btn-outline-dark btn-sm add-accessory-btn"
+                                    data-id="acc-@acc.AccessoryId"
+                                    data-name="@acc.AccessoryName"
+                                    data-price="@acc.Price"
+                                    data-image="/images/tv-accessories/@(acc.ImageList.FirstOrDefault() ?? "default.jpg")">
+                                Add To Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
