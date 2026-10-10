@@ -8,7 +8,7 @@ I built this project to practice full-stack web development with the .NET stack:
 
 Watch a walkthrough of the project here:
 
-**[Telly demo on YouTube (unlisted)](https://youtu.be/YOUR_VIDEO_ID)**
+**[Telly demo on YouTube (unlisted)](https://youtu.be/RoMRoDof4ZY)**
 
 ## Features
 
@@ -39,7 +39,7 @@ TelevisionStore/
 │   ├── Views/
 │   └── wwwroot/
 ├── TELLYQUERIES.sql        # SQL script for the tellydb database
-├── TelevisionStore.slnx    # Visual Studio solution
+├── TelevisionStore.slnx    
 └── README.md
 ```
 
@@ -55,8 +55,8 @@ TelevisionStore/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
-cd YOUR-REPO-NAME
+git clone https://github.com/ali-533/telly-store.git
+cd telly-store
 ```
 
 ### 2. Create the database
@@ -107,7 +107,5 @@ Then open the URL shown in the terminal (usually `https://localhost:xxxx`).
 - Search, filtering and sorting in the catalog
 - Online payment integration
 
-## Author
 
-**Ali Jomaa**
-GitHub: [YOUR-USERNAME](https://github.com/YOUR-USERNAME)
+GitHub: [YOUR-USERNAME](https://github.com/ali-533)
