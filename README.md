@@ -99,13 +99,4 @@ Then open the URL shown in the terminal (usually `https://localhost:xxxx`).
 - Handling form input and building a checkout flow
 - Using Git and GitHub to version and publish a project
 
-## Possible Improvements
-
-- User accounts and login
-- Storing orders in the database with order history
-- Admin page to add, edit and delete products
-- Search, filtering and sorting in the catalog
-- Online payment integration
-
-
 GitHub: [ali-533](https://github.com/ali-533)
